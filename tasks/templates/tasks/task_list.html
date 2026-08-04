@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Tasks</title>
+</head>
+<body>
+    <h1>Tasks</h1>
+    <ul>
+        {% for task in tasks %}
+            <li>{{ task.title }} - {{ task.status }} (Project: {{ task.project.name }})</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
