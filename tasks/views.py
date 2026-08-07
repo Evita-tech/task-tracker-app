@@ -10,7 +10,26 @@ def project_list(request):
 
 def task_list(request):
     tasks = Task.objects.all()
-    return render(request, 'tasks/task_list.html', {'tasks': tasks})
+
+    search_query = request.GET.get('search', '')
+    if search_query:
+        tasks = tasks.filter(title__icontains=search_query)
+
+    status_filter = request.GET.get('status','')
+    if status_filter:
+        tasks = tasks.filter(status=status_filter)
+
+    sort_by = request.GET.get('sort','')
+    if sort_by:
+        tasks = tasks.order_by(sort_by)
+
+    context = {
+        'tasks': tasks,
+        'search_query': search_query,
+        'status_filter': status_filter,
+        'sort_by': sort_by,
+    }
+    return render(request, 'tasks/task_list.html', context)
 
 def dashboard(request):
     total_projects = Project.objects.count()
