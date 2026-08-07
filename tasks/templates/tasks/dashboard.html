@@ -5,6 +5,10 @@
 </head>
 <body>
     <h1>Dashboard</h1>
+    <form method="post" action="{% url 'logout' %}">
+    {% csrf_token %}
+    <button type="submit">Log Out</button>
+</form>
     <p>Total Projects: {{ total_projects }}</p>
     <p>Total Tasks: {{ total_tasks }}</p>
     <p>To Do: {{ todo_count }}</p>
