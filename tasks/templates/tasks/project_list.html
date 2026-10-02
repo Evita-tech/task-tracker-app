@@ -5,11 +5,35 @@
     {% if user.groups.all.0.name == 'Manager' %}
     <a href="{% url 'create_project' %}" class="btn btn-uedcl mb-4">+ New Project</a>
     {% endif %}
-    <div class="list-group">
-        {% for project in projects %}
-        <div class="list-group-item">
-            <strong>{{ project.name }}</strong> — {{ project.description }}
-        </div>
+   
+{% include 'tasks/pagination.html' %}
+
+<h2 class="mt-5 mb-3">Project Tasks</h2>
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Project</th>
+            <th>Assigned to</th>
+            <th>Status</th>
+            <th>Due date</th>
+            {% if user.groups.all.0.name == 'Manager' %}
+<th>Actions</th>
+{% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for task in tasks %}
+        <tr>
+            <td>{{ task.project.name }}</td>
+            <td>{{ task.assigned_to.username|default:"Unassigned" }}</td>
+            <td>{{ task.status }}</td>
+            <td>{{ task.due_date|default:"None" }}</td>
+            {% if user.groups.all.0.name == 'Manager' %}
+<td><a href="{% url 'delete_project' task.project.pk %}" class="btn btn-sm btn-outline-danger confirm-action
+     " title="Delete project"><i class="bi bi-trash"></i></a></td>
+{% endif %}
+        </tr>
         {% endfor %}
-    </div>
-{% endblock %}
+    </tbody>
+</table>
+    {% endblock %}

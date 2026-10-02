@@ -31,26 +31,41 @@
         </div>
     </form>
 
-    <table class="table table-bordered bg-white">
-        <thead>
-            <tr>
-                <th>Title</th>
-                <th>Project</th>
-                <th>Assigned to</th>
-                <th>Status</th>
-                <th>Due date</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for task in tasks %}
-            <tr>
-                <td>{{ task.title }}</td>
-                <td>{{ task.project }}</td>
-                <td>{{ task.assigned_to }}</td>
-                <td>{{ task.status }}</td>
-                <td>{{ task.due_date }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-{% endblock %}
+    <div class="table-responsive">
+        <table class="table table-bordered bg-white">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Project</th>
+                    <th>Assigned to</th>
+                    <th>Status</th>
+                    <th>Due date</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+        {% for task in tasks %}
+    <tr>
+        <td>
+        {{ task.title }}
+        {% if task.edited %}<span class="badge bg-warning text-dark">Edited</span>{% endif %}
+    </td>
+        <td>{{ task.project }}</td>
+        <td>{{ task.assigned_to }}</td>
+        <td>{{ task.status }}</td>
+        <td>{{ task.due_date }}</td>
+    <td>
+        <a href="{% url 'update_task_status' task.pk %}" class="btn btn-sm btn-outline-dark">Update</a>
+        {% if user.groups.all.0.name == 'Manager' %}
+        <a href="{% url 'edit_task' task.pk %}" class="btn btn-sm btn-outline-primary">Edit</a>
+        
+        <a href="{% url 'delete_task' task.pk %}" class="btn btn-sm btn-outline-danger confirm-action">Delete</a>
+        {% endif %}
+    </td>
+    </tr>
+    {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% include 'tasks/pagination.html' %}
+    {% endblock %}

@@ -1,49 +1,56 @@
 {% extends 'tasks/base.html' %}
 {% block title %}Dashboard{% endblock %}
 {% block content %}
-    <h1 class="mb-4">Dashboard</h1>
-    <div class="row">
-        <div class="col-md-4 mb-3">
-            <div class="card text-bg-primary">
-                <div class="card-body">
-                    <h5 class="card-title">Total Projects</h5>
-                    <p class="card-text fs-3">{{ total_projects }}</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 mb-3">
-            <div class="card text-bg-secondary">
-                <div class="card-body">
-                    <h5 class="card-title">Total Tasks</h5>
-                    <p class="card-text fs-3">{{ total_tasks }}</p>
-                </div>
-            </div>
+<h1 class="mb-4">Dashboard</h1>
+{% if app_project %}
+<div class="mb-4">
+    <a href="#appProjectInfo" class="text-decoration-none" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="appProjectInfo" title="About this application">
+        <i class="bi bi-info-circle-fill fs-4" style="color: var(--uedcl-red);"></i>
+    </a>
+    <div class="collapse mt-2" id="appProjectInfo">
+        <div class="p-3 rounded border" style="background-color: #fff; color: var(--uedcl-black); border-color: #ddd;">
+            <h5 class="mb-1" style="color: var(--uedcl-red);">{{ app_project.name }}</h5>
+            <p class="mb-0 small">{{ app_project.description }}</p>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-4 mb-3">
-            <div class="card text-bg-light">
-                <div class="card-body">
-                    <h5 class="card-title">To Do</h5>
-                    <p class="card-text fs-3">{{ todo_count }}</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 mb-3">
-            <div class="card text-bg-warning">
-                <div class="card-body">
-                    <h5 class="card-title">In Progress</h5>
-                    <p class="card-text fs-3">{{ in_progress_count }}</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 mb-3">
-            <div class="card text-bg-success">
-                <div class="card-body">
-                    <h5 class="card-title">Done</h5>
-                    <p class="card-text fs-3">{{ done_count }}</p>
-                </div>
-            </div>
+</div>
+{% endif %}
+
+<div class="row row-cols-1 row-cols-md-5 g-3">
+    <div class="col">
+        <div class="p-3 bg-white rounded shadow-sm h-100 stat-card" style="border-top: 4px solid #1F4E79;">
+            <i class="bi bi-folder2 fs-4" style="color: var(--uedcl-red);"></i>
+            <div class="text-muted small text-uppercase mt-2">Total Projects</div>
+            <div class="fs-2 fw-bold" style="color: var(--uedcl-black);">{{ total_projects }}</div>
         </div>
     </div>
+    <div class="col">
+        <div class="p-3 bg-white rounded shadow-sm h-100 stat-card" style="border-top: 4px solid #1F4E79;">
+            <i class="bi bi-list-task fs-4" style="color: var(--uedcl-red);"></i>
+            <div class="text-muted small text-uppercase mt-2">Total Tasks</div>
+            <div class="fs-2 fw-bold" style="color: var(--uedcl-black);">{{ total_tasks }}</div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="p-3 bg-white rounded shadow-sm h-100 stat-card" style="border-top: 4px solid #1F4E79;">
+            <i class="bi bi-circle fs-4 text-secondary"></i>
+            <div class="text-muted small text-uppercase mt-2">To Do</div>
+            <div class="fs-2 fw-bold" style="color: var(--uedcl-black);">{{ todo_count }}</div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="p-3 bg-white rounded shadow-sm h-100 stat-card" style="border-top: 4px solid #1F4E79;">
+            <i class="bi bi-hourglass-split fs-4" style="color: #f0ad4e;"></i>
+            <div class="text-muted small text-uppercase mt-2">In Progress</div>
+            <div class="fs-2 fw-bold" style="color: var(--uedcl-black);">{{ in_progress_count }}</div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="p-3 bg-white rounded shadow-sm h-100 stat-card" style="border-top: 4px solid #198754;">
+            <i class="bi bi-check-circle fs-4" style="color: #198754;"></i>
+            <div class="text-muted small text-uppercase mt-2">Done</div>
+            <div class="fs-2 fw-bold" style="color: var(--uedcl-black);">{{ done_count }}</div>
+        </div>
+    </div>
+</div>
 {% endblock %}

@@ -1,0 +1,70 @@
+{% extends 'tasks/base.html' %}
+{% block title %}Update Task{% endblock %}
+{% block content %}
+ <div class="mx-auto" style="max-width: 500px;">
+    <h1 class="mb-4">Update Task</h1>
+    
+
+    <h5 class="mt-4">Comments</h5>
+    <div class="mb-3">
+        {% for comment in comments %}
+        <div class="small mb-2 border-bottom pb-1">
+            <strong>{{ comment.author }}</strong>
+            <span class="text-muted">({{ comment.created_at|date:"M d, H:i" }}):</span>
+            {{ comment.text }}
+        </div>
+        {% empty %}
+        <div class="small text-muted">No comments yet.</div>
+        {% endfor %}
+    </div>
+
+    {% if error %}
+    <div class="alert alert-danger py-2">{{ error }}</div>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        <label for="status">Status:</label>
+        <select name="status" id="status" class="form-select mb-3">
+            <option value="todo" {% if task.status == 'todo' %}selected{% endif %}>To Do</option>
+            <option value="in_progress" {% if task.status == 'in_progress' %}selected{% endif %}>In Progress</option>
+            <option value="done" {% if task.status == 'done' %}selected{% endif %}>Done</option>
+        </select>
+
+        <label for="text">Comment (required):</label>
+        <textarea name="text" id="text" class="form-control mb-3" rows="2" required></textarea>
+        <div class="mb-3">
+    <a href="#" id="challengesToggle" class="text-decoration-none small text-dark">
+        <i class="bi bi-caret-down-fill"></i> Add challenges faced
+    </a>
+    <textarea name="challenges" id="challenges" class="form-control mt-2 d-none" rows="2" placeholder="Any challenges faced while working on this task..."></textarea>
+</div>
+
+        <button type="submit" class="btn btn-uedcl d-block mt-3">Update Status</button>
+    </form>
+</div>
+<script>
+document.getElementById('challengesToggle').addEventListener('click', function(e) {
+    e.preventDefault();
+    const box = document.getElementById('challenges');
+    const icon = this.querySelector('i');
+    box.classList.toggle('d-none');
+    if (box.classList.contains('d-none')) {
+        icon.classList.remove('bi-caret-up-fill');
+        icon.classList.add('bi-caret-down-fill');
+    } else {
+        icon.classList.remove('bi-caret-down-fill');
+        icon.classList.add('bi-caret-up-fill');
+        box.focus();
+    }
+});
+
+document.querySelector('form').addEventListener('submit', function() {
+    const challenges = document.getElementById('challenges').value.trim();
+    if (challenges) {
+        const comment = document.getElementById('text');
+        comment.value += '\n\nChallenges faced: ' + challenges;
+    }
+});
+</script>
+{% endblock %}

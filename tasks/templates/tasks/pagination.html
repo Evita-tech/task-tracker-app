@@ -1,0 +1,12 @@
+{% if page_obj.paginator.num_pages > 1 %}
+<ul class="pagination-custom">
+    {% for num in page_obj.paginator.page_range %}
+        <li class="{% if page_obj.number == num %}page-current{% endif %}">
+            <a href="?{{ query_string }}page={{ num }}">{{ num }}</a>
+        </li>
+    {% endfor %}
+    {% if page_obj.has_next %}
+        <li><a href="?{{ query_string }}page={{ page_obj.next_page_number }}">&gt;</a></li>
+    {% endif %}
+</ul>
+{% endif %}

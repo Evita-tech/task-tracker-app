@@ -23,6 +23,19 @@ class Task(models.Model):
     assigned_to = models.ForeignKey(User, on_delete=models.SET_NULL,null=True,blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     due_date = models.DateField(null=True,blank=True)
+    edited = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
+    
+class Comment(models.Model):
+    task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='comments')
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['created_at']
+
+    def __str__(self):
+        return f"Comment by {self.author} on {self.task}"
