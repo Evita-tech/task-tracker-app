@@ -2,14 +2,14 @@
 {% block title %}Log In{% endblock %}
 {% block content %}
     <div class="mx-auto" style="max-width: 400px;">
-        <h1 class="mb-4">Log In</h1>
+        <h1 class="mb-4 text-center">Log In</h1>
         <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit" class="btn btn-uedcl">Log In</button>
+            <div class="d-flex justify-content-between mt-3">
+                <button type="submit" class="btn btn-uedcl">Log In</button>
+                <a href="{% url 'register' %}" class="btn btn-uedcl" style="background-color: #1F4E79; border-color: #1F4E79; color: white;">Sign Up</a>
+            </div>
         </form>
-        <div class="text-center mt-3">
-    <a href="{% url 'register' %}" class="btn btn-uedcl">Sign Up</a>
-</div>
     </div>
 {% endblock %}
