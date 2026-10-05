@@ -119,3 +119,6 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = []
 LOGIN_REDIRECT_URL = 'dashboard'
 LOGOUT_REDIRECT_URL = 'project_list'
+# Email settings (development: prints emails in the terminal)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = 'tasktracker@example.com'

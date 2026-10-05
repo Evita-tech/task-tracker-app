@@ -3,7 +3,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from .models import Project, Task, Comment
-from .forms import ProjectForm, TaskForm, CommentForm
+from .forms import ProjectForm, TaskForm, CommentForm,RegisterForm
+from django.core.mail import send_mail
 def is_manager(user):
     return user.groups.filter(name='Manager').exists()
 
@@ -15,12 +16,6 @@ def project_list(request):
     page_obj = paginator.get_page(page_number)
     tasks = Task.objects.exclude(project__name="Task Tracking Application").select_related('project', 'assigned_to')
     return render(request, 'tasks/project_list.html', {'projects': page_obj, 'page_obj': page_obj, 'tasks': tasks})
-
-
-
-
-
-
 @login_required
 def task_list(request):
     tasks = Task.objects.all()
@@ -59,9 +54,6 @@ def task_list(request):
     }
     return render(request, 'tasks/task_list.html', context)
     
-
-   
-
 @login_required
 def dashboard(request):
     app_project = Project.objects.filter(name="Task Tracking Application").first()
@@ -83,12 +75,12 @@ def dashboard(request):
 
 def register(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = RegisterForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('login')
     else:
-        form = UserCreationForm()  
+        form = RegisterForm()  
     return render(request, 'tasks/register.html', {'form': form})
 
 
@@ -115,7 +107,21 @@ def create_task(request):
     if request.method == 'POST':
         form = TaskForm(request.POST)
         if form.is_valid():
-            form.save()
+            task = form.save()
+            if task.assigned_to and task.assigned_to.email:
+                send_mail(
+                    subject=f'New task assigned: {task.title}',
+                    message=(
+                        f'Hello {task.assigned_to.username},\n\n'
+                        f'You have been assigned a new task.\n\n'
+                        f'Task: {task.title}\n'
+                        f'Project: {task.project.name}\n'
+                        f'Due date: {task.due_date or "Not set"}\n\n'
+                        f'Please log in to the Task Tracker to view it.'
+                    ),
+                    from_email=None,
+                    recipient_list=[task.assigned_to.email],
+                )
             return redirect('task_list')
     else:
         form = TaskForm()
