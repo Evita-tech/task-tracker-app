@@ -59,7 +59,7 @@
         {% if user.groups.all.0.name == 'Manager' %}
         <a href="{% url 'edit_task' task.pk %}" class="btn btn-sm btn-outline-primary">Edit</a>
         
-        <a href="{% url 'delete_task' task.pk %}" class="btn btn-sm btn-outline-danger confirm-action">Delete</a>
+        <a href="{% url 'delete_task' task.pk %}" class="btn btn-sm btn-outline-danger confirm-action" title="Delete"><i class="bi bi-trash"></i></a>
         {% endif %}
     </td>
     </tr>
